@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Odibee+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./Public/styles.css">
+    <title>SPN Encryption</title>
+</head>
+<body>
+    <h1> ARK Cryptosystem </h1>
+    <div class="container" id="ok">
+        <div class="leftPane">
+            <form action="" class="formPlain">
+                <label for="plainText">Plaintext</label>
+                <input type="text" name="plainText" id="plainText">
+                <label for="keyp">Key</label>
+                <input type="text" class="keyp" id="keyp">
+                <button class="encrypt btn">Encrypt</button>
+                <textarea name="cipherArea" id="cipherMessage" cols="30" rows="10">
+                </textarea>
+            </form>
+        </div>
+        <div class="rightPane">
+            <form action="">
+                <label for="cipherText">Ciphertext</label>
+                <input type="text" name="cipherText" id="cipherText"> 
+                <label for="keyc">Key</label>
+                <input type="text" name="keyc" id="keyc">  
+                <button class="decrypt btn">Decrypt</button>
+                <textarea name="plainArea" id="plainMessage" cols="30" rows="10">
+
+                </textarea>
+            </form>
+        </div>
+    </div>
+   <script type="module" defer src="./Public/index.js"></script>
+</body>
+</html>
