@@ -1,19 +1,53 @@
+function getSbox(key){
+    let arr=[];
+    for(let i=0;i<256;i++)
+        arr.push(i);
+    let tempKey=padKey(key,256);
+    for(let i=0;i<256;i++){
+        let j=tempKey.charCodeAt(i);
+        let temp=arr[j];
+        arr[j]=arr[i];
+        arr[i]=temp;
+    }
+    // console.log(arr);
+    return arr;
+}
+function getPbox(key){
 
+    let n=key.length;
+    let arr=[];
+    for(let i=0;i<n;i++)
+        arr.push(i);
+    // let tempKey=padKey(key,256);
+    for(let i=0;i<n;i++){
+        let j=key.charCodeAt(i)%n;
+        let temp=arr[j];
+        arr[j]=arr[i];
+        arr[i]=temp;
+    }
+    // console.log(arr);
+    return arr;
+}
 export function encrypt(plaintext,key,blockSize=32,rounds=3){
-    // x=Number(x);
-    // y=Number(y);
     let keyarr=[],
         plaintextarr=[],
+        dplaintextarr=[],
         ciphertextarr=[];
     let n=plaintext.length;
     keyarr = populateKey(key,rounds);
     plaintextarr = padText(plaintext,blockSize);
     ciphertextarr=encryptHelper(plaintextarr,keyarr,rounds);
-    // decryptHelper(ciphertextarr,keyarr,rounds);
+    dplaintextarr=decryptHelper(ciphertextarr,keyarr,rounds);
     // printText(ciphertextarr);
     // return ciphertextarr;
     // console.log(plaintextarr);
+    console.log(plaintextarr);
     console.log(ciphertextarr);
+    console.log(dplaintextarr);
+    // getSbox(keyarr[0]);
+    // permutationBox(keyarr[0]);
+    // console.log(ciphertextarr);
+    console.log()
     return 1;
 }
 function xor(text, key){
@@ -27,6 +61,67 @@ function xor(text, key){
     }
     return tempstring;
 }
+function substitutionLayer(text,key){
+    let sboxarr=getSbox(key);
+    let newtext=``;
+    for(let i=0;i<text.length;i++){
+        let x=(text.charCodeAt(i));
+        newtext+=String.fromCharCode(sboxarr[x]);
+    }
+    return newtext;
+}
+export function convertArrToStr(chararr){
+    let text=``;
+    for(let i=0;i<chararr.length;i++){
+        text+=chararr[i];
+    }
+    return text;
+}
+function permutationLayer(text,key){
+    let pboxarr=getPbox(key);
+    // let newtext=text;
+    let newtext=[];
+    newtext.length=text.length;
+    for(let i=0;i<text.length;i++){
+        // let x=(text.charCodeAt(i));
+        // newtext+=String.fromCharCode(pboxarr[x]);
+        newtext[i]=text[pboxarr[i]];
+    }
+    newtext=convertArrToStr(newtext);
+    return newtext;
+}
+function invPermutationLayer(text,key){
+    let pboxarr=getPbox(key);
+    pboxarr=getInvSbox(pboxarr);
+    let newtext=[];
+    newtext.length=text.length;
+    for(let i=0;i<text.length;i++){
+        // let x=(text.charCodeAt(i));
+        // newtext+=String.fromCharCode(pboxarr[x]);
+        newtext[pboxarr[i]]=text[i];
+    }
+    newtext=convertArrToStr(newtext);
+    return newtext;
+}
+
+function getInvSbox(sbox){
+    let arr=[];
+    arr.length=sbox.length;
+    for(let i=0;i<sbox.length;i++){
+        arr[sbox[i]]=i;
+    }
+    return arr;
+}
+function invSubstitutionLayer(text,key){
+    let sboxarr=getSbox(key);
+    sboxarr=getInvSbox(sboxarr);
+    let newtext=``;
+    for(let i=0;i<text.length;i++){
+        let x=(text.charCodeAt(i));
+        newtext+=String.fromCharCode(sboxarr[x]);
+    }
+    return newtext;
+}
 function encryptHelper(plaintextarr,keytextarr,rounds=3){
     let ciphertextarr=[];
     for(let i=0;i<plaintextarr.length;i++){
@@ -37,28 +132,42 @@ function encryptHelper(plaintextarr,keytextarr,rounds=3){
 function encryptBlockHelper(plaintext,keyarr,rounds=3 ){
     //N number of rounds
     let ciphertext=plaintext;
-    console.log(ciphertext);
+    // console.log(ciphertext);
     for(let i=0;i<rounds;i++){
         //xor with 1st key
         // console.log(ciphertext);
 
         ciphertext=xor(ciphertext,keyarr[i]);
         //substitution Box
+        // let subsBox=getSbox(key[i]);
+        ciphertext=substitutionLayer(ciphertext,keyarr[i]);
         //Permutatuion box
+        ciphertext=permutationLayer(ciphertext,keyarr[i]);
     }
-    console.log(ciphertext);
+    // console.log(ciphertext);
     return ciphertext;
+}
+function decryptHelper(ciphertextarr,keytextarr,rounds=3){
+    let plaintextarr=[];
+    for(let i=0;i<ciphertextarr.length;i++){
+        plaintextarr.push(decryptBlockHelper(ciphertextarr[i],keytextarr,rounds));
+    }
+    return plaintextarr;
 }
 function decryptBlockHelper(plaintext,keyarr,rounds=3 ){
     //N number of rounds
     let ciphertext=plaintext;
     for(let i=rounds-1;i>=0;i--){
-        //xor with 1st key
-        console.log(ciphertext);
-
-        ciphertext=xor(ciphertext,keyarr[i]);
-        //substitution Box
         //Permutatuion box
+
+        ciphertext=invPermutationLayer(ciphertext,keyarr[i]);
+        //substitution Box
+        ciphertext=invSubstitutionLayer(ciphertext,keyarr[i]);
+        //xor with 1st key
+        // console.log(ciphertext);
+        ciphertext=xor(ciphertext,keyarr[i]);
+        
+        
     }
     console.log(ciphertext);
     return ciphertext;
