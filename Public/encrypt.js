@@ -44,11 +44,31 @@ export function encrypt(plaintext,key,blockSize=32,rounds=3){
     console.log(plaintextarr);
     console.log(ciphertextarr);
     console.log(dplaintextarr);
-    // getSbox(keyarr[0]);
-    // permutationBox(keyarr[0]);
-    // console.log(ciphertextarr);
-    console.log()
+    console.log( extractFinalPlaintext(plaintextarr));
     return 1;
+}
+function reverseString(str) {
+    var splitString = str.split(""); 
+    var reverseArray = splitString.reverse(); 
+    var joinArray = reverseArray.join(""); 
+    return joinArray; 
+}
+function extractFinalPlaintext(ciphertextarr){
+    let finaltext=``;
+    let n=ciphertextarr.length;
+    for(let i=0;i<n-1;i++)
+        finaltext+=ciphertextarr[i];
+    let flag=0;
+    let invtext=``;
+    for(let i=ciphertextarr[n-1].length-1;i>=0;i--){
+        if(ciphertextarr[n-1][i]!='\\')
+            flag=1;
+        if(flag==1){
+            invtext+=ciphertextarr[n-1][i];
+        }
+    }
+    finaltext+=reverseString(invtext);
+    return finaltext;
 }
 function xor(text, key){
     let tempstring=``;
@@ -85,7 +105,7 @@ function permutationLayer(text,key){
     for(let i=0;i<text.length;i++){
         // let x=(text.charCodeAt(i));
         // newtext+=String.fromCharCode(pboxarr[x]);
-        newtext[i]=text[pboxarr[i]];
+        newtext[pboxarr[i]]=text[i];
     }
     newtext=convertArrToStr(newtext);
     return newtext;
@@ -222,23 +242,7 @@ export function padKey(key,size){
     key=tempKey.slice(0,size);
     return key;
 }
-// function hashCode(key,shift) {
-//     let hash = 0;
-//     if (key.length == 0) {
-//         return hash;
-//     }
-//     console.log(key);
-//     for (var i = 0; i < key.length; i++) {
-//         var char = key.charCodeAt(i);
-//         hash = ((hash<<shift)-hash)+char;
-//         hash = hash & hash; // Convert to 32bit integer
-//     }
-//     console.log(`A`+hash);
-//     return hash;
-// }
-// function dec2bin(dec) {
-//     return (dec >>> 0).toString(2);
-//   }
+
 function vignere(keyati,key,size=32){
     let tempstring=``;
     // console.log(keyati);
