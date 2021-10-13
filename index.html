@@ -17,7 +17,9 @@
                 <input type="text" name="plainText" id="plainText">
                 <label for="keyp">Key</label>
                 <input type="text" name="keyp" id="keyp">
-                <div class="advanced">
+               
+                   
+                <div class="advanced advancedHide">
                     <div class="advancedDetails">
                         <label for="blockSize">Block Size:</label>
                         <select name="blockSize" id="blockSize">
@@ -32,9 +34,11 @@
                     <input type="number" name="rounds" id="rounds" value="5">
                    </div>
                 </div>
+                <div class="toggleAdv">
+                    <button style="font-size: x-small; margin: 0px; padding: 0%;" class="btnToggleAdv" type="button"><u>Show Advanced</u></button>
+                </div>
                
-               
-                <button class="encrypt btn">Encrypt</button>
+                <button type="submit" class="encrypt btn">Encrypt</button>
                 
                 <!-- <textarea name="cipherArea" id="cipherMessage" cols="30" rows="10">
                 </textarea> -->
@@ -46,7 +50,7 @@
                 <input type="text" name="cipherText" id="cipherText"> 
                 <label for="keyc">Key</label>
                 <input type="text" name="keyc" id="keyc">  
-                <div class="advanced">
+                <div class="advanced advancedHide">
                     <div class="advancedDetails">
                         <label for="blockSize">Block Size:</label>
                         <select name="blockSize" id="blockSize">
@@ -61,8 +65,11 @@
                     <input type="number" name="rounds" id="rounds" value="5">
                    </div>
                 </div>
+                <div class="toggleAdv">
+                    <button style="font-size: x-small; margin: 0px; padding: 0%;" class="btnToggleAdv" type="button"><u>Show Advanced</u></button>
+                </div>
                
-                <button class="decrypt btn">Decrypt</button>
+                <button type="submit" class="decrypt btn">Decrypt</button>
                 <!-- <textarea name="plainArea" id="plainMessage" cols="30" rows="10">
                 </textarea> -->
             </form>

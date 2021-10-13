@@ -10,7 +10,30 @@ body{
     margin:0;
 
 }
-
+.toggleAdv{
+    direction: rtl;
+}
+/* .btnToggleAdv{
+    border: 0px;
+    border-radius: 0px;
+    background-color: transparent;
+} */
+.advanced{
+    display: flex;
+    flex-direction: column;
+}
+.advancedHide{
+    transition: all 1s ease-in-out;
+    display: none;
+}
+.advancedShow{
+    transition: all 1s ease-in-out;
+    display: inherit;
+}
+.advancedDetails{
+    display: flex;
+    flex-direction: column;
+}
 form{
     display: flex;
     flex-direction: column;
